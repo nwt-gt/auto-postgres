@@ -24,7 +24,7 @@ Bring down the both postgres 9.6 and 12 to mount volume to an customer ubuntu do
 docker-compose -f postgres-docker-compose.yml down
 ```
 
-Sometimes build might fail due to mirroring issue. See error below.
+Sometimes build might fail due to mirroring issue. See error below. *Not certain of solution*
 
 ```
   File has unexpected size (302348 != 302925). Mirror sync in progress? [IP: 103.1.138.206 80]
