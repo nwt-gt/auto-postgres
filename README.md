@@ -58,6 +58,11 @@ Bring down the custom container and bring up the new postgres 12 with the voluem
 
 ```
 docker-compose -f temp-docker-compose.yml down
-docker-compose -f migrate-docker-compose.yml up -d
 ```
    **check if data upgrade is successful in this new postgres-12 container**
+
+Bring down the new conatiner when done.
+
+```
+docker-compose -f migrate-docker-compose.yml up -d
+```
