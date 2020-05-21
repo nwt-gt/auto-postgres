@@ -1,0 +1,25 @@
+version: "3.4"
+
+#volumes:
+        #    9.6-config:
+        #      driver_opts:
+        #        type: none
+        #        device: $PWD/data/9.6-config
+        #        o: bind
+        #    12-config:
+        #      driver_opts:
+        #        type: none
+        #        device: $PWD/data/12-config
+        #        o: bind
+
+services:
+  temp_container:
+    image: weetong/autotest:v3
+    volumes:
+            #     - 9.6-config:/var/lib/postgresql/9.6/main
+     - $PWD/data/9.6:/var/lib/postgresql/9.6/main
+       #     - 12-config:/var/lib/postgresql/12/main
+     - $PWD/data/12:/var/lib/postgresql/12/main
+    command: /bin/bash
+    stdin_open: true
+    tty: true

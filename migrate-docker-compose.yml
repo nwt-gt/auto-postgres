@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+  migrate_postgres:
+    image: postgres:12
+    volumes:
+     - $PWD/data/12:/var/lib/postgresql/data
+    env_file:
+     - $PWD/config/postgres.env
+    ports:
+     - "5444:5432"

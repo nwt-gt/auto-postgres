@@ -1,0 +1,20 @@
+version: "3.4"
+
+services:
+  old_postgres:
+    image: postgres:9.6
+    volumes:
+     - $PWD/data/9.6:/var/lib/postgresql/data
+    env_file:
+     - $PWD/config/postgres.env
+    ports:
+     - "5322:5432"
+
+  new_postgres:
+    image: postgres:12
+    volumes:
+     - $PWD/data/12:/var/lib/postgresql/data
+    env_file:
+     - $PWD/config/postgres.env
+    ports:
+     - "5324:5432"
