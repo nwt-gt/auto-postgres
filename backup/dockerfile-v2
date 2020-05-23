@@ -1,0 +1,22 @@
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV LANG C.UTF-8
+
+RUN apt-get -y update && \
+# Install OS utilities
+    apt-get -y install vim gnupg gnupg2 wget sudo lsb-release tzdata locales && \
+    apt-get clean all && \
+# Set Up Locales and Timezone
+    locale-gen en_US en_US.UTF-8 && dpkg-reconfigure locales && \
+    echo "Asia/Singapore" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata && \
+# Set Up postgres-12 & 9.6   
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | sudo tee  /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update && \
+    apt-get -y upgrade && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yq install postgresql-9.6 && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yq install postgresql-12 && \
+    apt-get -y autoremove && \
+    apt-get -y autoclean 

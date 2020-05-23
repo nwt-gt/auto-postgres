@@ -1,0 +1,1 @@
+/usr/lib/postgresql/9.6/bin/postgres "-D" "/var/lib/postgresql/9.6/main" "-p" "50432" "-b" "-c" "config_file=/var/lib/postgresql/9.6/main/postgresql.conf" "-c" "listen_addresses=" "-c" "unix_socket_permissions=0700" "-c" "unix_socket_directories=/tmp"

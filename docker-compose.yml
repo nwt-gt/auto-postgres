@@ -1,0 +1,40 @@
+version: "3.4"
+
+volumes:
+  9.6_data:
+    driver_opts:
+      type: none
+      device: $PWD/data/9.6
+      o: bind
+  12_data:
+    driver_opts:
+      type: none
+      device: $PWD/data/12
+      o: bind
+
+services:
+  old_postgres:
+    image: postgres:9.6
+    volumes:
+     - 9.6_data:/var/lib/postgresql/data
+    env_file:
+     - $PWD/config/postgres.env
+    ports:
+     - "5000-5999:5432"
+
+  new_postgres:
+    image: postgres:12
+    volumes:
+     - 12_data:/var/lib/postgresql/data
+    env_file:
+     - $PWD/config/postgres.env
+    ports:
+     - "5000-5999:5432"
+  temp_container:
+    image: weetong/autotest:v5
+    volumes:
+     - 9.6_data:/var/lib/postgresql/9.6/main
+     - 12_data:/var/lib/postgresql/12/main
+    command: /bin/bash
+    stdin_open: true
+    tty: true
