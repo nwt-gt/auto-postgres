@@ -1,12 +1,36 @@
-# Intrusctions
+# Setup
 
-Bring up postgres-9.6 postgres-12 and custom ubuntu container with postgres 9.6 & 12 installed.
+Run this script to initialize directory for volume and to move exiting data to the volume.
 
 ```
-docker-compose -f final-docker-compose.yml up -d    
+sh runscript.sh
 ```
 
-**If this customer docker image is not available. User can pull from [here](https://hub.docker.com/repository/docker/weetong/autotest) or build from the dockerfile** 
+# Postgres 9.6
+Bring up postgres-9.6. It will initialize with the data created in setup
+
+```
+docker-compose up -d old_postgres 
+docker-compose down
+```
+
+# Postgres 12
+Bring up postgres-12. It will initialize with a new Postgres 12.
+
+```
+docker-compose up -d new_postgres 
+docker-compose down
+```
+
+# Perform data upgrade
+Bring up the temp container. It consist of Ubuntu:18.04 as base with postgres-9.6 & 12 installed.
+
+```
+docker-compose build config
+docker-compose up -d temp_container
+docker-compose down
+```
+
 Sometimes build might fail due to mirroring issue. See error below. *Not certain of solution*
 
 ```
@@ -20,29 +44,22 @@ Sometimes build might fail due to mirroring issue. See error below. *Not certain
 Fetched 84.6 kB in 1s (90.5 kB/s)
 ```
 
-Copy init scripts to populate data for postgres-9.6 and run the script to generate data
+# Check data in Postgres-12
 
-```
-docker cp $PWD/config/. autotest_old_postgres_1:/data/
 
-docker exec -t autotest_old_postgres_1 psql -U postgres -f /data/10-postgres-sakila-schema.sql
-
-docker exec -t autotest_old_postgres_1 psql -U postgres -f /data/20-postgres-sakila-insert-data.sql
+1. 
 ```
-Copy script to customer conatiner and run it. This is to specifically remove the default database in postgresql 12 due to database type inconsistency with postgres 9.6. 
-**Tried setting locale when building the dockerfile but issue persist **
-```
-docker cp $PWD/config/.  autotest_temp_container_1:/data/
-```
-Execute the script
-
-```
-docker exec -it autotest_temp_container_1 sh /data/database-upgrade.sh
+docker-compose up -d new_postgres 
+docker exec -it autotest_new_postgres_1 -U postgres
+select * from xxxx
 ```
 
-Bring down the containers and restart the postgres 12 again. Check if the new data is populated over.
-```
-docker-compose -f final-docker-compose.yml down
+ 2. To enter any of the containers above when it is running. 
+ 
+ ```
+Docker exec -it autotest_old_postgres_1 bash
 
-docker-compose -f final-docker-compose.yml up -d new_postgres
-```
+docker exec -it autotest_temp_container_1 bash
+
+docker exec -it autotest_new_postgres_1 bash
+ ```
