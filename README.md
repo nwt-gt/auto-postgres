@@ -26,7 +26,7 @@ docker-compose down
 Bring up the temp container. It consist of Ubuntu:18.04 as base with postgres-9.6 & 12 installed.
 
 ```
-docker-compose build config
+docker-compose build temp_container
 docker-compose up -d temp_container
 docker-compose down
 ```
@@ -47,12 +47,22 @@ Fetched 84.6 kB in 1s (90.5 kB/s)
 # Check data in Postgres-12
 
 
-1. 
+1.  Bring up postgres-12 and check data
 ```
 docker-compose up -d new_postgres 
-docker exec -it autotest_new_postgres_1 -U postgres
-select * from xxxx
+docker exec -it autotest_new_postgres_1 psql -U postgres
+select count(2) from actor;
 ```
+
+Sample results
+```
+ count
+-------
+   200
+(1 row)
+
+```
+
 
  2. To enter any of the containers above when it is running. 
  
