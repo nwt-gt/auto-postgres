@@ -31,7 +31,8 @@ services:
     ports:
      - "5000-5999:5432"
   temp_container:
-    image: weetong/autotest:v5
+    image: weetong/autotest:v6
+    build: config/.
     volumes:
      - 9.6_data:/var/lib/postgresql/9.6/main
      - 12_data:/var/lib/postgresql/12/main
